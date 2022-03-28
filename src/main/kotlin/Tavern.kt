@@ -1,10 +1,33 @@
+import kotlin.math.roundToInt
 
 const val TAVERN_NAME = "Szynk Hipolit'a"
 
-fun main(args: Array<String>) {
-//   placeOrder("shandy,Oddech Smoka,5.91")
-    placeOrder("eliksir,Zdrowy wykop,4.83")
+var playerGold = 10
+var playerSilver = 10
 
+fun main(args: Array<String>) {
+   placeOrder("shandy,Oddech Smoka,5.91")
+
+}
+
+fun performPurchase(price: Double){
+    displayBalance()
+    val totalPurse = playerGold + (playerSilver / 100.0)
+    println("Sumaryczna wartość sakiewki: $totalPurse")
+    println("Zamawianie produktu za: $price")
+
+    val remainingBalance = totalPurse - price
+    println("W sakiewce zostało: ${"%.2f".format(remainingBalance)}")
+
+    val remainingGold = remainingBalance.toInt()
+    val remainingSilver = (remainingBalance % 1 * 100).roundToInt()
+    playerGold = remainingGold
+    playerSilver = remainingSilver
+    displayBalance()
+}
+
+private fun displayBalance(){
+    println("Stan sakiewki gracza: złoto: $playerGold, srebro: $playerSilver")
 }
 
 private fun toDragonSpeak(phrase: String) =
@@ -28,6 +51,7 @@ fun placeOrder(menuData: String) {
     val message = "Mordowycz kupil $name ($type) za $price."
     println(message)
 
+    performPurchase(price.toDouble())
 
     val phrase = if (name == "Oddech Smoka"){
         "Mordowicz konstatuuje z zachwytem: ${toDragonSpeak("No... Ależ doskonały jest ten $name")}"
