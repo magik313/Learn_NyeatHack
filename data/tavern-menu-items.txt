@@ -1,0 +1,5 @@
+shandy,Oddech Smoka,5.91
+eliksir,Zdrowy Wykop,4.83
+posiłek,czerep w kwaśnicy,1.22
+racja żołnierska,marynowany garb wielbłąda,7.33
+eliksir,Lodowy Wypalacz Mózgu,11.22

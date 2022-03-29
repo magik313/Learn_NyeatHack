@@ -1,13 +1,43 @@
+import java.io.File
 import kotlin.math.roundToInt
 
 const val TAVERN_NAME = "Szynk Hipolit'a"
 
 var playerGold = 10
 var playerSilver = 10
+val patronList = mutableListOf("Ela", "Mordeczka", "Zocha")
+val lastName = listOf("Żelaznostopa", "Urwiłeb", "Zaraza")
+val uniquePatrons = mutableSetOf<String>()
+val menuList = File("data/tavern-menu-items.txt")
+    .readText()
+    .split("\n")
 
 fun main(args: Array<String>) {
-   placeOrder("shandy,Oddech Smoka,5.91")
+    if (patronList.contains("Ela")){
+        println("Karczmarz mówi: Ela gra w karty w tylnej sali")
+    }else{
+        println("Karczmarz mówi: Eli nie ma ")
+    }
 
+    if (patronList.containsAll(listOf("Zocha", "Mordeczka"))){
+        println("Karczmarz mówi: Tak, siedzą przy kociołku z gulszem")
+    }else{
+        println("Karczmarz mówi: nie wyjechali godzinę temu")
+    }
+
+    (0..9).forEach {
+        val first = patronList.shuffled().first()
+        val last = lastName.shuffled().first()
+        val name = "$first $last"
+        uniquePatrons += name
+    }
+    println(uniquePatrons)
+    var orderCount = 0
+    while (orderCount <= 9){
+        placeOrder(uniquePatrons.shuffled().first(),
+        menuList.shuffled().first())
+        orderCount++
+    }
 }
 
 fun performPurchase(price: Double){
@@ -42,21 +72,21 @@ private fun toDragonSpeak(phrase: String) =
         }
     }
 
-fun placeOrder(menuData: String) {
+fun placeOrder(patronName: String, menuData: String) {
     val indexOfApostrophe = TAVERN_NAME.indexOf('\'')
     val tavernMaster = TAVERN_NAME.substring(6 until indexOfApostrophe)
-    println("Mordowicz i $tavernMaster rozmawiaja o zamowieniu")
+    println("$patronName i $tavernMaster rozmawiaja o zamowieniu")
 
     val (type, name, price) = menuData.split(',')
-    val message = "Mordowycz kupil $name ($type) za $price."
+    val message = "$patronName kupil(a) $name ($type) za $price."
     println(message)
 
-    performPurchase(price.toDouble())
+//    performPurchase(price.toDouble())
 
     val phrase = if (name == "Oddech Smoka"){
-        "Mordowicz konstatuuje z zachwytem: ${toDragonSpeak("No... Ależ doskonały jest ten $name")}"
+        "$patronName konstatuuje z zachwytem: ${toDragonSpeak("No... Ależ doskonały jest ten $name")}"
     } else {
-        "Mordowicz mowi: dziekuję za ${name}"
+        "$patronName mowi: dziekuję za ${name}"
     }
     println(phrase)
 }
