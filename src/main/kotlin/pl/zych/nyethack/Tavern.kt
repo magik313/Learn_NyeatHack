@@ -1,5 +1,6 @@
+package pl.zych.nyethack
+
 import java.io.File
-import kotlin.math.roundToInt
 
 const val TAVERN_NAME = "Szynk Hipolit'a"
 
@@ -36,7 +37,8 @@ fun main(args: Array<String>) {
     }
     var orderCount = 0
     while (orderCount <= 9){
-        placeOrder(uniquePatrons.shuffled().first(),
+        placeOrder(
+            uniquePatrons.shuffled().first(),
         menuList.shuffled().first())
         orderCount++
     }
