@@ -3,14 +3,14 @@ import kotlin.math.roundToInt
 
 const val TAVERN_NAME = "Szynk Hipolit'a"
 
-var playerGold = 10
-var playerSilver = 10
 val patronList = mutableListOf("Ela", "Mordeczka", "Zocha")
 val lastName = listOf("Żelaznostopa", "Urwiłeb", "Zaraza")
 val uniquePatrons = mutableSetOf<String>()
 val menuList = File("data/tavern-menu-items.txt")
     .readText()
     .split("\n")
+
+val patronGold = mutableMapOf<String, Double>()
 
 fun main(args: Array<String>) {
     if (patronList.contains("Ela")){
@@ -31,33 +31,28 @@ fun main(args: Array<String>) {
         val name = "$first $last"
         uniquePatrons += name
     }
-    println(uniquePatrons)
+    uniquePatrons.forEach {
+        patronGold[it] = 6.0
+    }
     var orderCount = 0
     while (orderCount <= 9){
         placeOrder(uniquePatrons.shuffled().first(),
         menuList.shuffled().first())
         orderCount++
     }
+
+    displayPatronBalances()
 }
 
-fun performPurchase(price: Double){
-    displayBalance()
-    val totalPurse = playerGold + (playerSilver / 100.0)
-    println("Sumaryczna wartość sakiewki: $totalPurse")
-    println("Zamawianie produktu za: $price")
-
-    val remainingBalance = totalPurse - price
-    println("W sakiewce zostało: ${"%.2f".format(remainingBalance)}")
-
-    val remainingGold = remainingBalance.toInt()
-    val remainingSilver = (remainingBalance % 1 * 100).roundToInt()
-    playerGold = remainingGold
-    playerSilver = remainingSilver
-    displayBalance()
+private fun displayPatronBalances() {
+    patronGold.forEach { patron, balance ->
+        println("$patron, zawartośc sakiewki: ${"%.2f".format(balance)}")
+    }
 }
 
-private fun displayBalance(){
-    println("Stan sakiewki gracza: złoto: $playerGold, srebro: $playerSilver")
+fun performPurchase(price: Double, patronName: String) {
+    val totalPurse = patronGold.getValue(patronName)
+    patronGold[patronName] = totalPurse - price
 }
 
 private fun toDragonSpeak(phrase: String) =
@@ -81,7 +76,7 @@ fun placeOrder(patronName: String, menuData: String) {
     val message = "$patronName kupil(a) $name ($type) za $price."
     println(message)
 
-//    performPurchase(price.toDouble())
+    performPurchase(price.toDouble(), patronName)
 
     val phrase = if (name == "Oddech Smoka"){
         "$patronName konstatuuje z zachwytem: ${toDragonSpeak("No... Ależ doskonały jest ten $name")}"
