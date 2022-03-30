@@ -10,6 +10,10 @@ fun main(args: Array<String>) {
     val auraColor = player.auraColor()
 
 
+    var currentRoom = TownSquare()
+    println(currentRoom.description())
+    println(currentRoom.load())
+
 
     printPlayerStatus(player)
 
